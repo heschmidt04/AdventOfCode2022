@@ -38,18 +38,43 @@ for line in lines:
 print(total_score)
 
 # Part 2
-result_outcomes = {"X": 1, "Y": 0, "Z": 2}
-result_scores = {"X": 0, "Y": 3, "Z": 6}
+end_states = {"Y": 3, "X": 0, "Z": 6}# tie, lose, win
 
-total_score = 0  # reset for reuse in part 2
+total_score = 0 # reset for reuse in part 2
 for line in lines:
     # opponents choice is always first
     opponent_option = line[0]
     # the end state of the round mapped to end_states
-    result_outcome = line[2]
+    end_state = line[2]
 
-    player_option = (options[opponent_option] - result_outcomes[result_outcome]) % 3
-    round_score = (player_option + 1) + result_scores[result_outcome]
+    # nine if statements way
+    # 1 = rock
+    # 2 = paper
+    # 3 = scissors
+    if opponent_option == "A": # rock
+        if end_state == "X":   # require a loss
+            player_score = 3   # scissors beaten by rock
+        elif end_state == "Y": # require a tie
+            player_score = 1   # two rocks collide
+        else:
+            player_score = 2 # win! paper over rock
+    elif opponent_option == "B": # paper
+        if end_state == "X":     # require a loss
+            player_score = 1     # rock sits on paper
+        elif end_state == "Y":   # require a tie
+            player_score = 2     # paper and paper
+        else:
+            player_score = 3     # win! scissors cuts paper
+    else: # scissors
+        if end_state == "X":   # require a loss
+            player_score = 2   #  paper is cut by scissors
+        elif end_state == "Y": # require a tie
+            player_score = 3   # scissors and scissors
+        else:
+            player_score = 1   # win! rocks beat scissors
+
+    round_score = end_states[end_state] + player_score
+
     total_score += round_score
 
 print(total_score)
